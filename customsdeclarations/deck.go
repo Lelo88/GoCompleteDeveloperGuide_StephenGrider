@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
+	"time"
 )
 
 // Create a new type of deck which is a slice of strings.
@@ -32,6 +34,9 @@ func (d deck) print() {
 	}
 }
 
+/*This code defines a function called deal that takes a deck of cards (d) and a hand size 
+(handSize) as input. It then returns two decks: the first deck consists of the first handSize cards from d, 
+and the second deck consists of the remaining cards in d after the first handSize cards.*/
 func deal(d deck, handSize int) (deck, deck) {
 	return d[:handSize], d[handSize:]
 }
@@ -54,4 +59,17 @@ func newDeckFromFile(filename string) deck {
 	splitDeck := strings.Split(string(bs), ",")
 
 	return deck(splitDeck)
+}
+
+
+// generador random de cartas
+func (d deck) shuffle() {
+	source := rand.NewSource(time.Now().UnixNano()) // creamos un source para crear aleatoriedad, con el dìa 
+	//corriente en nanosegundos (representados en int64)
+	rand.New(source) // generador de numeros aleatorios
+	
+	for i := range d {
+		newPosition := rand.Intn(len(d) - 1) // generador de numeros aleatorios
+		d[i], d[newPosition] = d[newPosition], d[i]
+	}
 }
